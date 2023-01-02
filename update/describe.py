@@ -8,7 +8,7 @@ import pyarrow as pa
 import json
 
 TIMELINE = 'data/timeline.parquet'
-HOURS_AGO = [6, 12, 24, 72]
+HOURS_AGO = [6, 12, 24, 72, 142,284,568,1136, 2272]
 DATE_FORMAT = '%Y-%m-%d %H:%M'
 # AGGREGATE_SINCE = dt.datetime(2022,11,21).date()
 
