@@ -19,7 +19,7 @@ def describe_all(df):
 
 def describe_instances(df):
 
-    def get_times(df):
+    def get_times(df: pd.DataFrame):
         times = pd.DataFrame({'time': df.updated_at.unique()})
         latest = times.time.max()
         timedata = {0: latest}
@@ -33,9 +33,14 @@ def describe_instances(df):
     instances = [df[df.updated_at == df.updated_at.max()][['name', 'users', 'statuses']].set_index('name')]
     dfi = df.pivot_table(index='name', columns='updated_at', values='users')
 
+    min_date = df.groupby('name').min().updated_at
+
     for h in HOURS_AGO:
+        column = (dfi[times[0]] - dfi[times[h]]).rename(index=h)
+        column_mins = [dfi[min_date[x]][x] for x in column[column.isna()].index]
+        column[column.isna()] = column_mins
         instances.append(
-            (dfi[times[0]] - dfi[times[h]]).rename(index=h)
+            column
         )
 
     instances = pd.concat(instances, axis=1)
